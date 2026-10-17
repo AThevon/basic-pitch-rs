@@ -4,6 +4,8 @@
 An unofficial, parity-tested port of Spotify's <a href="https://github.com/spotify/basic-pitch">Basic Pitch</a>: polyphonic note transcription for any instrument or voice, as a library, a command-line tool and a WebAssembly module.</p>
 
 <p align="center">
+  <a href="https://athevon.github.io/basic-pitch-rs/"><strong>Try it in your browser</strong></a>
+  &nbsp;·&nbsp;
   <a href="#command-line-tool"><strong>Install</strong></a>
   &nbsp;·&nbsp;
   <a href="#library"><strong>Library</strong></a>

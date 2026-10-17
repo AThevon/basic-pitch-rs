@@ -1,0 +1,63 @@
+name: Demo
+
+# Builds the WebAssembly demo (examples/wasm) and publishes it on GitHub Pages.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "crates/basic-pitch-rs/**"
+      - "examples/wasm/**"
+      - "Cargo.lock"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master
+        with:
+          toolchain: stable
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      # build.sh refuses to run with a wasm-bindgen-cli that differs from Cargo.lock.
+      - name: Install wasm-bindgen-cli
+        run: >-
+          cargo install wasm-bindgen-cli --locked --version
+          "$(awk '$0 == "name = \"wasm-bindgen\"" { getline; gsub(/version = |"/, ""); print; exit }' Cargo.lock)"
+      - name: Build the WebAssembly module
+        run: examples/wasm/build.sh
+      - name: Assemble the site
+        run: |
+          mkdir -p _site
+          cp examples/wasm/index.html examples/wasm/main.js examples/wasm/worker.js _site/
+          cp -r examples/wasm/pkg _site/pkg
+          rm -f _site/pkg/.gitignore
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
