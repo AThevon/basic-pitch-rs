@@ -8,6 +8,8 @@ Until 1.0.0, a minor version bump (0.x.0) may contain breaking changes.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-17
+
 ### Added
 
 - Rust port of the Basic Pitch inference and note creation pipeline from
@@ -48,4 +50,5 @@ Until 1.0.0, a minor version bump (0.x.0) may contain breaking changes.
   a warning, where Python turns it into a negative index and drops nearly every
   note.
 
-[Unreleased]: https://github.com/AThevon/basic-pitch-rs/commits/main
+[Unreleased]: https://github.com/AThevon/basic-pitch-rs/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/AThevon/basic-pitch-rs/releases/tag/v0.1.0
