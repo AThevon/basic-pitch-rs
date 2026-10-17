@@ -170,6 +170,16 @@ the fixtures stays reasonable.
 - Add an entry under `## [Unreleased]` in [CHANGELOG.md](CHANGELOG.md) for every
   user-facing change.
 
+## Releases (maintainers)
+
+1. Bump `version` in the workspace `Cargo.toml`, move the `[Unreleased]` entries of
+   the changelog under the new version, and merge to `main`.
+2. Push a tag `vX.Y.Z`: [release.yml](.github/workflows/release.yml) builds the CLI
+   for every platform and attaches the archives to a draft GitHub release.
+3. Review the draft and publish it: [publish.yml](.github/workflows/publish.yml)
+   publishes `basic-pitch-rs`, then `basic-pitch-cli`, to crates.io through trusted
+   publishing (no token in the repository).
+
 ## License
 
 basic-pitch-rs is licensed under the [Apache License 2.0](LICENSE). Unless you
