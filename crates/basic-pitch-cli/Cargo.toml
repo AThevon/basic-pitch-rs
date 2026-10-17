@@ -1,0 +1,62 @@
+[package]
+name = "basic-pitch-cli"
+description = "Command-line audio-to-MIDI transcription with basic-pitch-rs, an unofficial Rust port of Spotify's Basic Pitch."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["audio-to-midi", "music-transcription", "pitch-detection", "midi", "cli"]
+categories = ["multimedia::audio", "command-line-utilities"]
+include = ["/src", "/schema", "/Cargo.toml", "/README.md", "/LICENSE", "/NOTICE"]
+default-run = "basic-pitch-rs"
+
+[[bin]]
+name = "basic-pitch-rs"
+path = "src/main.rs"
+
+[lib]
+name = "basic_pitch_cli"
+path = "src/lib.rs"
+
+[features]
+default = []
+## Resample with libsoxr in the same quality as librosa (`soxr_hq`), for sample-level
+## parity with Python Basic Pitch. Statically links libsoxr (LGPL-2.1-or-later).
+soxr = ["dep:soxr-sys"]
+## Adds the ONNX Runtime backend (`--backend ort`), about 3 times faster than tract.
+ort = ["basic-pitch-rs/ort-download"]
+
+[dependencies]
+basic-pitch-rs = { workspace = true, features = ["tract", "bundled-model", "midi"] }
+anyhow.workspace = true
+clap = { workspace = true, features = ["derive", "wrap_help"] }
+indicatif.workspace = true
+rubato.workspace = true
+serde.workspace = true
+serde_json = { workspace = true, features = ["raw_value"] }
+soxr-sys = { workspace = true, optional = true }
+thiserror.workspace = true
+symphonia = { workspace = true, features = ["adpcm", "aiff", "alac", "aac", "caf", "flac", "isomp4", "mkv", "mp3", "ogg", "pcm", "vorbis", "wav"] }
+
+[dev-dependencies]
+hound.workspace = true
+jsonschema.workspace = true
+ndarray.workspace = true
+ndarray-npy.workspace = true
+# Fixture helpers shared with the parity tests (path only: stripped on publish).
+parity = { path = "../parity" }
+serde_json = { workspace = true, features = ["float_roundtrip"] }
+tempfile.workspace = true
+
+# Prebuilt binaries for `cargo binstall basic-pitch-cli`, as attached to the GitHub
+# releases by .github/workflows/release.yml.
+[package.metadata.binstall]
+pkg-url = "{ repo }/releases/download/v{ version }/{ bin }-v{ version }-{ target }{ archive-suffix }"
+bin-dir = "{ bin }{ binary-ext }"
+pkg-fmt = "tgz"
+
+[package.metadata.binstall.overrides.x86_64-pc-windows-msvc]
+pkg-fmt = "zip"

@@ -1,0 +1,60 @@
+Basic Pitch
+Copyright 2022 Spotify AB
+
+This product includes software developed at
+Spotify AB (http://www.spotify.com/).
+
+This product includes software from Librosa (ISC).
+* Copyright (C) 2013--2017, librosa development team.
+
+This product includes software from mir_eval (MIT)
+* Copyright (C) 2014 Colin Raffel
+
+This product includes software from numpy (BSD)
+* Copyright (C) 2005-2022, NumPy Developers.
+
+This product includes software from pretty-midi (MIT)
+* Copyright (C) 2014 Colin Raffel
+
+This product includes software from resampy (ISC)
+* Copyright (C) 2016, Brian McFee
+
+This product includes software from scipy (BSD)
+* Copyright (C) 2001-2002 Enthought, Inc. 2003-2022, SciPy Developers
+
+This product includes software from tensorflow (Apache 2.0)
+* Copyright (C) 2019 Google, LLC <packages@tensorflow.org>
+
+The tests for `basic-pitch` include audio files from the
+Vocadito dataset liscened under Creative Commons
+Attribution 4.0 International. The dataset can be found at:
+https://zenodo.org/record/5578807#.YnRm5vPMKDU
+
+--------------------------------------------------------------------------------
+
+basic-pitch-rs
+Copyright 2026 Adrien Thevon
+
+basic-pitch-rs is an unofficial Rust port of Basic Pitch
+(https://github.com/spotify/basic-pitch). It is not affiliated with,
+endorsed by, or supported by Spotify. It is a Derivative Work of
+spotify/basic-pitch v0.4.0, distributed under the Apache License,
+Version 2.0. Every Rust source file translated from the Python code of
+Basic Pitch carries a header that names the original file and states
+that it was modified.
+
+This product includes the Basic Pitch model file nmp.onnx
+(basic_pitch/saved_models/icassp_2022/nmp.onnx) from spotify/basic-pitch
+v0.4.0, unmodified, at crates/basic-pitch-rs/model/nmp.onnx.
+* Copyright 2022 Spotify AB, licensed under the Apache License, Version 2.0.
+* SHA-256: 2c3c1d144bfa61ad236e92e169c13535c880469a12a047d4e73451f2c059a0ec
+
+The test fixtures of basic-pitch-rs include two audio files from the
+vocadito dataset (tests/fixtures/audio/vocadito_10.wav and
+tests/fixtures/audio/vocadito_14.wav), copied unmodified from the tests
+of spotify/basic-pitch. vocadito is by Rachel Bittner, Katherine Pasalo,
+Juan José Bosch, Gabriel Meseguer-Brocal and David Rubinstein, and is
+licensed under the Creative Commons Attribution 4.0 International
+License (https://creativecommons.org/licenses/by/4.0/). The dataset can
+be found at https://doi.org/10.5281/zenodo.5578807. These files are
+only used by the tests and are not part of the published crates.

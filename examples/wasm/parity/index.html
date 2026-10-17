@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>basic-pitch-rs parity check</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #131518;
+        --fg: #d8dde3;
+        --muted: #8a929c;
+        --accent: #6fcf7c;
+        --error: #ef7d6d;
+      }
+      body {
+        margin: 0;
+        padding: 24px 16px;
+        background: var(--bg);
+        color: var(--fg);
+        font: 14px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      }
+      h1 {
+        margin: 0 0 4px;
+        font: 500 18px/1.3 system-ui, sans-serif;
+      }
+      p {
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-family: system-ui, sans-serif;
+      }
+      pre {
+        margin: 0;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .ok {
+        color: var(--accent);
+      }
+      .failed {
+        color: var(--error);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>parity check in the browser</h1>
+    <p>
+      Runs the WebAssembly build on the fixtures of <code>tests/fixtures</code> and compares it with
+      Python Basic Pitch. Serve the repository root over HTTP, then open
+      <code>/examples/wasm/parity/</code>.
+    </p>
+    <pre id="log">loading...</pre>
+    <script type="module">
+      import init, { Transcriber, version } from "../pkg/basic_pitch_wasm.js";
+      import { runParity } from "./parity.mjs";
+
+      const out = document.getElementById("log");
+      const log = (line) => {
+        out.textContent += `${line}\n`;
+      };
+      const fixtures = new URL("../../../tests/fixtures/", import.meta.url);
+
+      try {
+        const t0 = performance.now();
+        await init();
+        out.textContent = "";
+        log(`basic-pitch-rs ${version()}, ${navigator.userAgent}`);
+        log(`module compiled in ${(performance.now() - t0).toFixed(0)} ms`);
+        const summary = await runParity({
+          Transcriber,
+          read: async (path) => {
+            const response = await fetch(new URL(path, fixtures));
+            if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+            return new Uint8Array(await response.arrayBuffer());
+          },
+          log,
+        });
+        out.className = summary.failures ? "failed" : "ok";
+        window.parityResult = summary;
+      } catch (error) {
+        out.className = "failed";
+        log(String(error?.stack ?? error));
+        window.parityResult = { error: String(error) };
+      }
+    </script>
+  </body>
+</html>

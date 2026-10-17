@@ -1,0 +1,22 @@
+[project]
+name = "basic-pitch-reference-main"
+version = "0.1.0"
+description = "Same as ../, against spotify/basic-pitch main (fa5997a), whose unwrap_output no longer drops the end of the file."
+requires-python = "==3.11.*"
+dependencies = [
+    "basic-pitch[onnx]",
+    "onnxruntime==1.31.0",
+    "numpy==2.4.6",
+    "librosa==0.11.0",
+    "soxr==1.1.0",
+    "soundfile==0.14.0",
+    "pretty-midi==0.2.11.post0",
+    "mido==1.3.3",
+    "setuptools<82",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+basic-pitch = { git = "https://github.com/spotify/basic-pitch", rev = "fa5997af0a" }

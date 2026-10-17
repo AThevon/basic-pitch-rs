@@ -1,0 +1,77 @@
+cff-version: 1.2.0
+message: >-
+  basic-pitch-rs is a Rust port of Basic Pitch. If you use it in research,
+  please cite the Basic Pitch paper (the preferred citation below) and name
+  basic-pitch-rs, with its version, as the implementation you used.
+type: software
+title: "basic-pitch-rs: an unofficial Rust port of Spotify's Basic Pitch"
+abstract: >-
+  basic-pitch-rs is an unofficial Rust port of Basic Pitch, a lightweight
+  neural network for automatic music transcription by Spotify's Audio
+  Intelligence Lab. It turns polyphonic audio into note events with pitch
+  bends and Standard MIDI Files, runs the original ONNX model with pure Rust
+  inference (tract) or ONNX Runtime, and is tested for parity against the
+  official Python implementation.
+authors:
+  - given-names: Adrien
+    family-names: Thevon
+version: 0.1.0
+license: Apache-2.0
+repository-code: "https://github.com/AThevon/basic-pitch-rs"
+url: "https://github.com/AThevon/basic-pitch-rs"
+keywords:
+  - automatic music transcription
+  - audio to MIDI
+  - polyphonic pitch detection
+  - multipitch estimation
+  - pitch bend
+  - ONNX
+  - Rust
+  - WebAssembly
+preferred-citation:
+  type: conference-paper
+  title: >-
+    A Lightweight Instrument-Agnostic Model for Polyphonic Note Transcription
+    and Multipitch Estimation
+  authors:
+    - given-names: Rachel M.
+      family-names: Bittner
+    - given-names: Juan José
+      family-names: Bosch
+    - given-names: David
+      family-names: Rubinstein
+    - given-names: Gabriel
+      family-names: Meseguer-Brocal
+    - given-names: Sebastian
+      family-names: Ewert
+  collection-title: >-
+    Proceedings of the IEEE International Conference on Acoustics, Speech, and
+    Signal Processing (ICASSP)
+  conference:
+    name: "2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)"
+    city: Singapore
+    country: SG
+  publisher:
+    name: IEEE
+  year: 2022
+  start: 781
+  end: 785
+  doi: 10.1109/ICASSP43922.2022.9746549
+  identifiers:
+    - type: other
+      value: "arXiv:2203.09893"
+      description: arXiv preprint
+  url: "https://arxiv.org/abs/2203.09893"
+references:
+  - type: software
+    title: "Basic Pitch"
+    abstract: >-
+      A lightweight yet powerful audio-to-MIDI converter with pitch bend
+      detection. basic-pitch-rs ports its inference and note creation code
+      from version 0.4.0.
+    authors:
+      - name: Spotify AB
+    version: 0.4.0
+    date-released: 2024-08-16
+    license: Apache-2.0
+    repository-code: "https://github.com/spotify/basic-pitch"

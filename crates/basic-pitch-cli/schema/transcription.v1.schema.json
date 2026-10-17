@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/AThevon/basic-pitch-rs/main/crates/basic-pitch-cli/schema/transcription.v1.schema.json",
+  "title": "basic-pitch-rs transcription",
+  "description": "Notes transcribed by `basic-pitch-rs --json`, with the input, model and parameters that produced them. Version 1 of the layout: fields are only added within a version, so consumers should ignore fields they do not know.",
+  "type": "object",
+  "required": ["$schema", "schema_version", "generator", "model", "input", "analysis", "params", "notes"],
+  "properties": {
+    "$schema": {
+      "description": "URL of this schema.",
+      "type": "string"
+    },
+    "schema_version": {
+      "description": "Version of the document layout. It changes only when a field is removed, renamed or changes meaning.",
+      "const": 1
+    },
+    "generator": {
+      "description": "The program that wrote the document.",
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "basic-pitch-rs" },
+        "version": { "description": "Version of basic-pitch-rs.", "type": "string" }
+      }
+    },
+    "model": {
+      "description": "The model and how it was run.",
+      "type": "object",
+      "required": ["name", "sha256", "backend"],
+      "properties": {
+        "name": {
+          "description": "The Basic Pitch model of spotify/basic-pitch (ICASSP 2022).",
+          "const": "basic-pitch-icassp-2022"
+        },
+        "sha256": {
+          "description": "SHA-256 of the ONNX model file, lowercase hexadecimal.",
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "backend": {
+          "description": "Inference engine: tract (pure Rust) or ort (ONNX Runtime).",
+          "enum": ["tract", "ort"]
+        }
+      }
+    },
+    "input": {
+      "description": "The input file.",
+      "type": "object",
+      "required": ["path", "sample_rate", "channels", "frames", "duration_s", "codec"],
+      "properties": {
+        "path": { "description": "The path as given on the command line.", "type": "string" },
+        "sample_rate": { "description": "Sample rate of the file, in Hz.", "type": "integer", "minimum": 1 },
+        "channels": { "description": "Number of channels of the file.", "type": "integer", "minimum": 1 },
+        "frames": { "description": "Number of samples per channel.", "type": "integer", "minimum": 0 },
+        "duration_s": { "description": "Duration of the file, in seconds.", "type": "number", "minimum": 0 },
+        "codec": { "description": "Short name of the audio codec, such as pcm_s16le, flac, mp3 or aac.", "type": "string" }
+      }
+    },
+    "analysis": {
+      "description": "The audio as analyzed by the model.",
+      "type": "object",
+      "required": ["sample_rate", "samples", "resampler", "trim_mode", "frames"],
+      "properties": {
+        "sample_rate": { "description": "Sample rate of the model input.", "const": 22050 },
+        "samples": { "description": "Number of mono samples given to the model.", "type": "integer", "minimum": 0 },
+        "resampler": {
+          "description": "Resampler used to reach 22050 Hz, or null when the file was already at that rate.",
+          "enum": ["rubato", "soxr", null]
+        },
+        "trim_mode": {
+          "description": "How the model output is trimmed at the end of the file: like spotify/basic-pitch main, or like the 0.4.0 release.",
+          "enum": ["main", "v0.4.0"]
+        },
+        "frames": {
+          "description": "Number of frames of the model output (about 86.6 frames per second).",
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "params": {
+      "description": "Parameters of the note decoding and of the MIDI export, named after the command-line flags.",
+      "type": "object",
+      "required": [
+        "onset_threshold",
+        "frame_threshold",
+        "minimum_note_length_ms",
+        "minimum_frequency",
+        "maximum_frequency",
+        "infer_onsets",
+        "melodia_trick",
+        "include_pitch_bends",
+        "bend_offset",
+        "multiple_pitch_bends",
+        "midi_tempo"
+      ],
+      "properties": {
+        "onset_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+        "frame_threshold": { "type": "number", "minimum": 0, "maximum": 1 },
+        "minimum_note_length_ms": { "type": "number", "minimum": 0 },
+        "minimum_frequency": { "description": "In Hz, or null for no limit. A value below A0 (27.5 Hz) given on the command line limits nothing and is recorded as null.", "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "maximum_frequency": { "description": "In Hz, or null for no limit. Notes from the key of this frequency upwards are removed, as in Basic Pitch.", "type": ["number", "null"], "exclusiveMinimum": 0 },
+        "infer_onsets": { "type": "boolean" },
+        "melodia_trick": { "type": "boolean" },
+        "include_pitch_bends": { "type": "boolean" },
+        "bend_offset": { "description": "Added to every pitch bend, in thirds of a semitone. 0 reproduces Python Basic Pitch, whose in-tune notes read +1; -1 centers them on 0.", "type": "integer", "minimum": -6, "maximum": 6 },
+        "multiple_pitch_bends": { "type": "boolean" },
+        "midi_tempo": { "description": "In beats per minute.", "type": "number", "minimum": 4, "maximum": 1000 }
+      }
+    },
+    "notes": {
+      "description": "The notes, sorted by start time, then pitch.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/note" }
+    }
+  },
+  "$defs": {
+    "note": {
+      "type": "object",
+      "required": [
+        "start_s",
+        "end_s",
+        "start_frame",
+        "end_frame",
+        "pitch",
+        "note_name",
+        "amplitude",
+        "velocity",
+        "pitch_bends",
+        "pitch_bends_semitones"
+      ],
+      "properties": {
+        "start_s": { "description": "Start time, in seconds.", "type": "number", "minimum": 0 },
+        "end_s": { "description": "End time, in seconds.", "type": "number", "minimum": 0 },
+        "start_frame": { "description": "First frame of the note.", "type": "integer", "minimum": 0 },
+        "end_frame": { "description": "Frame after the last one (exclusive).", "type": "integer", "minimum": 1 },
+        "pitch": { "description": "MIDI note number.", "type": "integer", "minimum": 21, "maximum": 108 },
+        "note_name": {
+          "description": "Scientific pitch notation with sharps: C4 is MIDI 60, A4 is MIDI 69.",
+          "type": "string",
+          "pattern": "^[A-G]#?[0-8]$"
+        },
+        "amplitude": { "description": "Mean note activation over the note.", "type": "number", "minimum": 0, "maximum": 1 },
+        "velocity": { "description": "MIDI velocity: round(127 * amplitude), ties to even.", "type": "integer", "minimum": 0, "maximum": 127 },
+        "pitch_bends": {
+          "description": "One pitch bend per frame of the note (end_frame - start_frame values; value i applies to frame start_frame + i), in thirds of a semitone relative to pitch, plus params.bend_offset. null when pitch bends are disabled. With bend_offset 0 (the default, identical to Python Basic Pitch), in-tune notes read +1 because the model's pitch contour peaks one bin high (spotify/basic-pitch#87): use --bend-offset -1 to center them on 0.",
+          "type": ["array", "null"],
+          "items": { "type": "integer" }
+        },
+        "pitch_bends_semitones": {
+          "description": "The same pitch bends, in semitones (pitch_bends / 3). The +1/3 semitone bias of pitch_bends applies here too.",
+          "type": ["array", "null"],
+          "items": { "type": "number" }
+        }
+      }
+    }
+  }
+}

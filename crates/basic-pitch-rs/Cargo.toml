@@ -1,0 +1,80 @@
+[package]
+name = "basic-pitch-rs"
+description = "Polyphonic audio-to-MIDI transcription in pure Rust: an unofficial, parity-tested port of Spotify's Basic Pitch."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+documentation = "https://docs.rs/basic-pitch-rs"
+readme = "README.md"
+keywords = ["audio-to-midi", "music-transcription", "pitch-detection", "midi", "audio"]
+categories = ["multimedia::audio", "science", "wasm"]
+include = ["/src", "/examples", "/build.rs", "/model/nmp.onnx", "/Cargo.toml", "/README.md", "/LICENSE", "/NOTICE"]
+
+[lib]
+name = "basic_pitch"
+
+[features]
+default = ["tract", "bundled-model", "midi"]
+## Pure Rust inference with tract (works on wasm32).
+tract = ["dep:tract-onnx"]
+## Native inference with ONNX Runtime through the `ort` crate (Rust 1.92 or newer).
+## Links the ONNX Runtime 1.31 you provide (`ORT_LIB_LOCATION`, or `ort` features enabled
+## by your application such as `load-dynamic`).
+ort = ["dep:ort"]
+## `ort`, with a prebuilt ONNX Runtime downloaded at build time and linked statically.
+ort-download = ["ort", "ort/download-binaries", "ort/tls-rustls", "ort/copy-dylibs"]
+## Embeds the official `nmp.onnx` model (230 kB) in the binary.
+bundled-model = []
+## Standard MIDI File export, with the same events as Basic Pitch's pretty_midi output.
+midi = ["dep:midly"]
+## `Serialize`/`Deserialize` on the public data types.
+serde = ["dep:serde"]
+
+[dependencies]
+thiserror.workspace = true
+tract-onnx = { workspace = true, optional = true }
+ort = { workspace = true, optional = true, features = ["std", "api-22"] }
+midly = { workspace = true, optional = true }
+serde = { workspace = true, optional = true }
+
+# getrandom (pulled in by tract through rand) needs a backend on wasm32-unknown-unknown.
+# The JavaScript one is selected by default, so wasm-bindgen users need no extra flag;
+# building with `--cfg getrandom_backend="unsupported"` (or "custom") opts out of it.
+[target.'cfg(all(target_arch = "wasm32", target_os = "unknown", not(any(getrandom_backend = "unsupported", getrandom_backend = "custom"))))'.dependencies]
+tract-onnx = { workspace = true, optional = true, features = ["getrandom-js"] }
+
+[dev-dependencies]
+criterion.workspace = true
+hound.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+
+[[example]]
+name = "transcribe_file"
+required-features = ["tract", "bundled-model", "midi"]
+
+[[example]]
+name = "posteriorgrams"
+required-features = ["tract", "bundled-model"]
+
+[[bench]]
+name = "inference"
+harness = false
+required-features = ["tract", "bundled-model"]
+
+[[bench]]
+name = "postprocessing"
+harness = false
+
+[[bench]]
+name = "transcribe"
+harness = false
+required-features = ["tract", "bundled-model"]
+
+[package.metadata.docs.rs]
+features = ["tract", "ort", "bundled-model", "midi", "serde"]
+rustdoc-args = ["--cfg", "docsrs"]
+targets = ["x86_64-unknown-linux-gnu"]

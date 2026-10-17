@@ -1,0 +1,20 @@
+[project]
+name = "basic-pitch-reference"
+version = "0.1.0"
+description = "Generates the parity fixtures of basic-pitch-rs from the official Python Basic Pitch (ONNX backend)."
+requires-python = "==3.11.*"
+dependencies = [
+    "basic-pitch[onnx]==0.4.0",
+    "onnxruntime==1.31.0",
+    "numpy==2.4.6",
+    "librosa==0.11.0",
+    "soxr==1.1.0",
+    "soundfile==0.14.0",
+    "pretty-midi==0.2.11.post0",
+    "mido==1.3.3",
+    # resampy 0.4.2 (pinned by basic-pitch) still imports pkg_resources, removed in setuptools 82.
+    "setuptools<82",
+]
+
+[tool.uv]
+package = false

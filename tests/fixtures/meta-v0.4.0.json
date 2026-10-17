@@ -1,0 +1,116 @@
+{
+ "variant": "v0.4.0",
+ "model_sha256": "2c3c1d144bfa61ad236e92e169c13535c880469a12a047d4e73451f2c059a0ec",
+ "model_backend": "ONNX",
+ "python": "3.11.16",
+ "platform": "macOS-27.0.1-arm64-arm-64bit",
+ "packages": {
+  "basic-pitch": "0.4.0",
+  "numpy": "2.4.6",
+  "librosa": "0.11.0",
+  "soxr": "1.1.0",
+  "soundfile": "0.14.0",
+  "onnxruntime": "1.31.0",
+  "pretty-midi": null,
+  "mido": "1.3.3"
+ },
+ "librosa_load_res_type": "soxr_hq",
+ "cases": {
+  "pluck": {
+   "input_sha256": "d2a6bc8d8e7e2efc4807e9c4fc33c90a6fc654b5a45dce21eee94c2160beb90d",
+   "original_length_22050": 220500,
+   "n_windows": 7,
+   "n_frames": 860,
+   "notes": {
+    "default": 18,
+    "thresholds": 44,
+    "freq_range": 18,
+    "multiple_bends": 18,
+    "no_melodia": 16,
+    "no_infer_onsets": 17,
+    "no_bends": 18,
+    "tempo_90": 18
+   }
+  },
+  "short": {
+   "input_sha256": "770080da196527ebfd035a188ddfb3a3af5c5168fcf06d74110255b6e643cd04",
+   "original_length_22050": 13230,
+   "n_windows": 1,
+   "n_frames": 51,
+   "notes": {
+    "default": 1,
+    "thresholds": 1,
+    "freq_range": 1,
+    "multiple_bends": 1,
+    "no_melodia": 1,
+    "no_infer_onsets": 1,
+    "no_bends": 1,
+    "tempo_90": 1
+   }
+  },
+  "silence": {
+   "input_sha256": "9bf857f5d07d4f812ce979c0c6a882a4eedfe794421e2939ec5f4bb6a9f56f8e",
+   "original_length_22050": 66150,
+   "n_windows": 2,
+   "n_frames": 258,
+   "notes": {
+    "default": 0,
+    "thresholds": 0,
+    "freq_range": 0,
+    "multiple_bends": 0,
+    "no_melodia": 0,
+    "no_infer_onsets": 0,
+    "no_bends": 0,
+    "tempo_90": 0
+   }
+  },
+  "synth": {
+   "input_sha256": "359cbe7821ed10986229dc5ec691df76d8998925f1e159c34b347b41e31afe62",
+   "original_length_22050": 165375,
+   "n_windows": 5,
+   "n_frames": 645,
+   "notes": {
+    "default": 9,
+    "thresholds": 14,
+    "freq_range": 9,
+    "multiple_bends": 9,
+    "no_melodia": 7,
+    "no_infer_onsets": 9,
+    "no_bends": 9,
+    "tempo_90": 9
+   }
+  },
+  "vocadito_10": {
+   "input_sha256": "0978bde1c130ae26a9cfcd90012f12fdaf9877bbe45cf21c5237ba7ac9b8703b",
+   "original_length_22050": 200607,
+   "n_windows": 6,
+   "n_frames": 782,
+   "notes": {
+    "default": 28,
+    "thresholds": 118,
+    "freq_range": 28,
+    "multiple_bends": 28,
+    "no_melodia": 26,
+    "no_infer_onsets": 28,
+    "no_bends": 28,
+    "tempo_90": 28
+   }
+  },
+  "vocadito_14": {
+   "input_sha256": "a41e814df6ee5840f0beaea5da2ab3ad6b38be62b169da08962a722bcc06cdd1",
+   "original_length_22050": 268962,
+   "n_windows": 8,
+   "n_frames": 1049,
+   "notes": {
+    "default": 26,
+    "thresholds": 83,
+    "freq_range": 26,
+    "multiple_bends": 26,
+    "no_melodia": 26,
+    "no_infer_onsets": 24,
+    "no_bends": 26,
+    "tempo_90": 26
+   }
+  }
+ }
+}

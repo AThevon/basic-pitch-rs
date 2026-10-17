@@ -1,0 +1,30 @@
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: deps
+    groups:
+      # The tract crates are released together and must move as one.
+      tract:
+        patterns: ["tract-*"]
+      # ort is not grouped: it is a release candidate pinned with "=", and every
+      # bump has to be checked against the parity fixtures on its own.
+      cargo-minor-and-patch:
+        update-types: [minor, patch]
+        exclude-patterns: ["tract-*", "ort", "ort-sys"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci
+    groups:
+      github-actions:
+        patterns: ["*"]

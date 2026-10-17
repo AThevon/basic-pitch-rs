@@ -1,0 +1,98 @@
+name: Bug report
+description: Something does not work, crashes, or gives a different result from the official Basic Pitch.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please search [existing issues](https://github.com/AThevon/basic-pitch-rs/issues?q=is%3Aissue) first.
+
+        basic-pitch-rs aims for exact parity with [spotify/basic-pitch](https://github.com/spotify/basic-pitch) v0.4.0. If the notes differ from the Python output, that is a bug here, and a comparison is the most useful thing you can attach.
+
+        Security issues must not be reported here: see [SECURITY.md](https://github.com/AThevon/basic-pitch-rs/blob/main/SECURITY.md).
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug, and what you expected instead.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: basic-pitch-rs version
+      description: Output of `basic-pitch-rs --version`, the crate version from your Cargo.lock, or a commit SHA.
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: usage
+    attributes:
+      label: How do you use it?
+      options:
+        - CLI (basic-pitch-rs)
+        - Library (basic-pitch-rs crate)
+        - Library, compiled to WebAssembly
+    validations:
+      required: true
+  - type: dropdown
+    id: backend
+    attributes:
+      label: Inference backend
+      options:
+        - tract (default)
+        - ort (ONNX Runtime)
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system and architecture
+      placeholder: "macOS 27 arm64, Ubuntu 24.04 x86_64, Windows 11 x86_64, Chrome 140 (wasm)..."
+    validations:
+      required: true
+  - type: input
+    id: rust
+    attributes:
+      label: Rust version
+      description: Output of `rustc --version`, if you build from source.
+      placeholder: "rustc 1.91.0"
+  - type: textarea
+    id: audio
+    attributes:
+      label: Audio input
+      description: |
+        Format, sample rate, channels and duration of the file. A link to the file (or a short excerpt that reproduces the problem) helps a lot, if you are allowed to share it.
+      placeholder: "WAV, 48 kHz, stereo, 2:31. Excerpt: https://..."
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command or code
+      description: The exact command line, or a minimal code sample, that reproduces the problem.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output
+      description: The full output, error message or backtrace (`RUST_BACKTRACE=1`). For a parity issue, the differing notes from both implementations.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: python
+    attributes:
+      label: Comparison with the official Python Basic Pitch
+      description: |
+        Optional. If you ran `basic-pitch` (Python) on the same file, its version, model backend (ONNX, CoreML, TensorFlow, TFLite) and output. On macOS the Python package uses CoreML by default, which gives slightly different results from the ONNX model used here.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched the existing issues and this is not a duplicate.
+          required: true

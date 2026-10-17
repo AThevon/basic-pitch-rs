@@ -1,0 +1,19 @@
+[package]
+name = "basic-pitch-wasm"
+description = "WebAssembly bindings of basic-pitch-rs: the browser demo and the Node parity check."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+basic-pitch-rs = { path = "../../crates/basic-pitch-rs", default-features = false, features = ["tract", "bundled-model", "midi", "serde"] }
+serde.workspace = true
+serde_json.workspace = true
+wasm-bindgen.workspace = true

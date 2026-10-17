@@ -1,0 +1,24 @@
+[package]
+name = "parity"
+description = "Layer-by-layer parity tests of basic-pitch-rs against the official Python Basic Pitch."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish = false
+
+[features]
+## Also checks the ONNX Runtime backend (downloads ONNX Runtime 1.31 at build time).
+ort = ["basic-pitch-rs/ort-download"]
+
+[dependencies]
+basic-pitch-rs = { workspace = true, features = ["tract", "bundled-model", "midi"] }
+midly.workspace = true
+ndarray.workspace = true
+ndarray-npy.workspace = true
+serde_json = { workspace = true, features = ["float_roundtrip"] }
+
+[dev-dependencies]
+sha2.workspace = true

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>basic-pitch-rs in the browser</title>
+    <meta
+      name="description"
+      content="Polyphonic audio to MIDI transcription in the browser, with Spotify's Basic Pitch model run by Rust compiled to WebAssembly."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #131518;
+        --surface: #1a1d21;
+        --line: #2a2f35;
+        --fg: #dfe3e8;
+        --muted: #8c949e;
+        --accent: #6fcf7c;
+        --error: #ef7d6d;
+        --radius: 10px;
+        font-family: "Familjen Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      main {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 28px 16px 40px;
+      }
+      header {
+        margin-bottom: 20px;
+      }
+      .eyebrow {
+        color: var(--accent);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+      h1 {
+        margin: 2px 0 6px;
+        font-size: 26px;
+        font-weight: 500;
+        line-height: 1.2;
+      }
+      header p {
+        margin: 0;
+        max-width: 64ch;
+        color: var(--muted);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 260px;
+        gap: 16px;
+      }
+      @media (max-width: 760px) {
+        .layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+      }
+      #drop {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        min-height: 92px;
+        margin-bottom: 16px;
+        padding: 16px;
+        border-style: dashed;
+        text-align: center;
+        cursor: pointer;
+      }
+      #drop.over,
+      #drop:focus-visible {
+        border-color: var(--accent);
+        outline: none;
+      }
+      #drop strong {
+        font-weight: 500;
+      }
+      #drop span {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      #roll-panel {
+        position: relative;
+        padding: 12px;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 340px;
+      }
+      #empty {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--muted);
+        pointer-events: none;
+      }
+      #empty[hidden] {
+        display: none;
+      }
+      #status {
+        min-height: 24px;
+        margin: 10px 2px 0;
+        color: var(--muted);
+        font-size: 14px;
+        font-variant-numeric: tabular-nums;
+      }
+      #status.error {
+        color: var(--error);
+      }
+      aside {
+        padding: 16px;
+        align-self: start;
+      }
+      aside h2 {
+        margin: 0 0 12px;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .field {
+        display: block;
+        margin-bottom: 14px;
+      }
+      .field .label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+      }
+      .field output {
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      input[type="range"] {
+        width: 100%;
+        margin: 6px 0 0;
+        accent-color: var(--accent);
+      }
+      .check {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+      .check input {
+        margin-top: 4px;
+        accent-color: var(--accent);
+      }
+      .check small {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      button {
+        width: 100%;
+        margin-top: 6px;
+        padding: 9px 12px;
+        border: 1px solid var(--accent);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--accent);
+        font: inherit;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      button:disabled {
+        border-color: var(--line);
+        color: var(--muted);
+        cursor: default;
+      }
+      button:not(:disabled):hover {
+        background: var(--line);
+      }
+      footer {
+        margin-top: 28px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      footer a {
+        color: var(--fg);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">basic-pitch-rs, WebAssembly demo</div>
+        <h1>audio to midi, in your browser</h1>
+        <p>
+          Spotify's Basic Pitch model, run by Rust compiled to WebAssembly. Any instrument or voice,
+          polyphonic, with pitch bends. Your audio never leaves this page.
+        </p>
+      </header>
+
+      <div class="layout">
+        <section>
+          <label id="drop" class="panel" tabindex="0">
+            <strong>drop an audio file here, or click to choose one</strong>
+            <span>wav, mp3, flac, ogg, m4a: anything your browser can decode</span>
+            <input id="file" type="file" accept="audio/*" hidden />
+          </label>
+          <div id="roll-panel" class="panel">
+            <canvas id="roll" aria-label="Piano roll of the transcribed notes"></canvas>
+            <div id="empty">the notes will show up here</div>
+          </div>
+          <div id="status" role="status">loading the model...</div>
+        </section>
+
+        <aside class="panel">
+          <h2>settings</h2>
+          <label class="field">
+            <span class="label">onset threshold <output id="onset-out"></output></span>
+            <input id="onset" type="range" min="0.05" max="0.95" step="0.05" value="0.5" />
+          </label>
+          <label class="field">
+            <span class="label">note threshold <output id="frame-out"></output></span>
+            <input id="frame" type="range" min="0.05" max="0.95" step="0.05" value="0.3" />
+          </label>
+          <label class="field">
+            <span class="label">minimum note length <output id="length-out"></output></span>
+            <input id="length" type="range" min="20" max="500" step="1" value="127.7" />
+          </label>
+          <label class="check">
+            <input id="melodia" type="checkbox" checked />
+            <span>melodia trick<small>also keep notes found without an onset</small></span>
+          </label>
+          <label class="check">
+            <input id="center" type="checkbox" />
+            <span>center pitch bends<small>remove the +1/3 semitone bias of the model</small></span>
+          </label>
+          <button id="download" type="button" disabled>download MIDI</button>
+        </aside>
+      </div>
+
+      <footer>
+        An unofficial Rust port of
+        <a href="https://github.com/spotify/basic-pitch">spotify/basic-pitch</a>, Apache-2.0.
+        Not affiliated with Spotify. Source:
+        <a href="https://github.com/AThevon/basic-pitch-rs">github.com/AThevon/basic-pitch-rs</a>.
+      </footer>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

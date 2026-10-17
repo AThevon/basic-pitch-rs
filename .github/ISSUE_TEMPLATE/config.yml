@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or discussion
+    url: https://github.com/AThevon/basic-pitch-rs/discussions
+    about: Ask how to use basic-pitch-rs, share what you built, or discuss ideas before opening an issue.
+  - name: Security vulnerability
+    url: https://github.com/AThevon/basic-pitch-rs/security/advisories/new
+    about: Report a vulnerability privately. Please do not open a public issue.
+  - name: Issue with the model or the original Basic Pitch
+    url: https://github.com/spotify/basic-pitch/issues
+    about: Transcription quality problems that the official Python Basic Pitch has too belong upstream.

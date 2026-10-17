@@ -1,0 +1,80 @@
+# cargo-deny configuration: https://embarkstudios.github.io/cargo-deny/
+#
+# Run locally with `cargo deny check`. CI runs the same command on every push.
+
+[graph]
+# Check the dependency graph of every platform the project ships to, with every
+# feature enabled, so that optional backends (ort, soxr) are covered too.
+targets = [
+    "x86_64-unknown-linux-gnu",
+    "aarch64-unknown-linux-gnu",
+    "x86_64-apple-darwin",
+    "aarch64-apple-darwin",
+    "x86_64-pc-windows-msvc",
+    "wasm32-unknown-unknown",
+]
+all-features = true
+
+[advisories]
+# Unmaintained crates are reported only when they are direct dependencies of
+# a workspace crate; transitive ones are the business of their parents.
+unmaintained = "workspace"
+ignore = []
+
+[licenses]
+# Every license below is permissive or weak copyleft at the file level, and
+# compatible with distributing basic-pitch-rs under Apache-2.0.
+allow = [
+    "0BSD",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BlueOak-1.0.0",
+    "CDLA-Permissive-2.0",
+    "ISC",
+    "MIT",
+    # symphonia (audio decoding in the CLI) is MPL-2.0: file-level copyleft that
+    # only applies to symphonia's own source files, which this project does not modify.
+    "MPL-2.0",
+    "Unicode-3.0",
+    "Unlicense",
+    "Zlib",
+]
+confidence-threshold = 0.93
+
+# soxr-sys declares `license = "Apache-2.0"`, but it compiles and statically links
+# libsoxr 0.1.3, whose C sources are LGPL-2.1-or-later (src/LICENCE). The
+# clarification below states the real license of the crate, and the exception
+# allows LGPL for this crate only.
+#
+# soxr-sys is only reachable through the opt-in `soxr` feature of the CLI, which
+# gives sample-exact parity with librosa's resampler. It is never enabled by
+# default, and the prebuilt release binaries are built without it. Anyone who
+# distributes a binary built with `--features soxr` must meet the LGPL-2.1
+# obligations for libsoxr (license text, source offer, and the ability to relink).
+[[licenses.clarify]]
+crate = "soxr-sys"
+expression = "Apache-2.0 AND LGPL-2.1-or-later"
+license-files = [{ path = "src/LICENCE", hash = 0xd2283e01 }]
+
+[[licenses.exceptions]]
+crate = "soxr-sys"
+allow = ["LGPL-2.1-or-later"]
+
+[licenses.private]
+# Workspace crates that are never published (the parity test harness) are not
+# license-checked against the allow list.
+ignore = true
+
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+# Path dependencies inside the workspace carry no version requirement of their own.
+allow-wildcard-paths = true
+highlight = "all"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
