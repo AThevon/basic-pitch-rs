@@ -203,18 +203,22 @@ sets and both trim modes:
 | --- | --- | --- |
 | L0 | Bundled model | The file of basic-pitch 0.4.0 (SHA-256 checked) |
 | L1 | Audio windows | Bit-identical |
-| L2 | Model outputs, tract | Within 1.3e-6 of onnxruntime |
+| L2 | Model outputs, tract | Within 1.3e-6 of onnxruntime on Apple M2, within 5.3e-4 on GitHub's Linux x86-64 and macOS runners (see below) |
 | L2 | Model outputs, `ort` backend | Bit-identical on all 29 windows |
 | L3 | Unwrapped outputs and frame times | Bit-identical |
 | L4 | Notes from Python's model outputs | 1650 of 1650 notes identical: frames, pitches, 41 959 pitch bend values, amplitudes and times to the bit |
 | L5 | MIDI files | 96 files, 31 544 events, all identical |
-| L6 | Whole pipeline with tract, from samples to notes | 1650 of 1650 notes identical |
+| L6 | Whole pipeline with tract, from samples to notes | 1650 of 1650 notes identical on Apple M2; 1648 of 1650 on GitHub's runners, every difference bounded by the model output difference |
 | L7 | Adversarial post-processing cases | 17 synthetic cases (ties and plateaus, thresholds at 0 and 1, negative numpy indices, 9000-frame inputs, NaN, extreme tempos): 5252 notes and 47 MIDI files identical, and an error wherever Python raises |
 
-The closest call of L6 is a note activation of vocadito_10 that sits 2.9e-6 from a
-threshold, against a tract difference of 8.3e-7: parity of the notes holds on these
-recordings, and a value closer to a threshold than about 1e-6 could flip on another
-input. The command-line tool is checked end to end as well, from the audio files: 1650
+tract picks its matrix kernels from the CPU at run time, so the model outputs are not
+equally close to onnxruntime everywhere. On an Apple M2 they stay within 1.3e-6, and the
+closest call of L6 is a note activation of vocadito_10 that sits 2.9e-6 from a
+threshold. On GitHub's CI runners (Linux x86-64 and macOS) they stay within 5.3e-4, the
+same order as the WebAssembly build: two notes out of 1650 change because an activation
+sits within that distance of a threshold, and one pitch bend frame moves by one bin
+where two contour bins are nearly equal. The parity tests accept a difference only when
+it is bounded that way, on every CI run. The command-line tool is checked end to end as well, from the audio files: 1650
 of 1650 notes identical (frames, times, pitches, bends) with either resampler.
 Resampling moves amplitudes by up to 2.4e-4, so 2 velocities out of 1650 differ by one
 step.

@@ -83,9 +83,12 @@
 //! - windows, unwrapped outputs and frame times: bit-identical;
 //! - notes, frames, amplitudes, pitch bends and MIDI events from the same
 //!   posteriorgrams: identical (1650 notes, 96 MIDI files);
-//! - model outputs: within 1.3e-6 of onnxruntime with tract on native targets,
-//!   bit-identical with ONNX Runtime;
-//! - end to end with tract, from audio to notes: 1650 of 1650 notes identical.
+//! - model outputs: within 1.3e-6 of onnxruntime with tract on Apple M2 and within
+//!   5.3e-4 on other CPUs (tract picks its kernels at run time), bit-identical with
+//!   ONNX Runtime;
+//! - end to end with tract, from audio to notes: 1650 of 1650 notes identical on
+//!   Apple M2, 1648 of 1650 on GitHub's CI runners, each difference within a threshold
+//!   margin of the model output difference.
 //!
 //! One known quirk is kept on purpose: in-tune notes get a pitch bend of +1/3 of a
 //! semitone, because the model's pitch contour peaks one bin high (spotify/basic-pitch#87).
