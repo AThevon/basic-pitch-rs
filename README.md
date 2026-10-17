@@ -255,7 +255,9 @@ included. The library's benchmarks are in
 cargo build --target wasm32-unknown-unknown --no-default-features --features tract,bundled-model
 ```
 
-No extra flag is needed. [`examples/wasm`](./examples/wasm) has `wasm-bindgen`
+No extra flag is needed. Try it live at
+[athevon.github.io/basic-pitch-rs](https://athevon.github.io/basic-pitch-rs/).
+[`examples/wasm`](./examples/wasm) has `wasm-bindgen`
 bindings, a browser demo (drop a file, see a piano roll, download the MIDI file; the
 audio never leaves the page) and a parity check that runs in Node and in browsers. The
 module weighs 2.3 MB gzipped, model included, and transcribes about 22 times faster
@@ -348,6 +350,10 @@ run it with RTNeural and ONNX Runtime (version 2 moved to another model);
 Runtime; [basic-pitch-torch](https://github.com/gudgud96/basic-pitch-torch), a PyTorch
 version; and [w-ensink/basic_pitch](https://github.com/w-ensink/basic_pitch), an
 earlier Rust crate around NeuralNote's C++ core and ONNX Runtime, aimed at mobile.
+
+This port was written with the help of [Claude Code](https://claude.com/claude-code).
+Every claim about its behavior is backed by the parity suite against the Python
+implementation, which runs in CI on every change.
 
 ## Citation
 
