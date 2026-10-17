@@ -9,7 +9,13 @@ use parity::{
 };
 
 /// Tolerance of the native tract backend against onnxruntime.
-const TRACT_TOLERANCE: f32 = 1e-5;
+///
+/// tract picks its matrix kernels at run time from the CPU. With fused multiply-add
+/// kernels (Apple M2, for example) the outputs stay within 1.3e-6 of onnxruntime; the
+/// kernels selected on GitHub's runners give up to 2.4e-4, the same order as the
+/// WebAssembly build. The notes are checked against Python in L6, which explains any
+/// difference by a threshold margin.
+const TRACT_TOLERANCE: f32 = 1e-3;
 
 fn check_backend(name: &str, backend: &dyn Backend, tolerance: f32) -> f32 {
     let mut report = Report::new(&format!(

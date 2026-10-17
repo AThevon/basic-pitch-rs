@@ -111,7 +111,7 @@ jobs:
       # official Python implementation (tests/fixtures). Release mode keeps model
       # inference fast.
       - name: Parity with spotify/basic-pitch
-        run: cargo test --manifest-path crates/parity/Cargo.toml --release --locked
+        run: cargo test --manifest-path crates/parity/Cargo.toml --release --locked --no-fail-fast -- --nocapture
 
   msrv:
     name: MSRV
