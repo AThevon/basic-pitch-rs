@@ -15,7 +15,7 @@ repository = "https://github.com/AThevon/basic-pitch-rs"
 basic-pitch-rs = { path = "crates/basic-pitch-rs", version = "0.1.0" }
 ndarray = "0.17.2"
 tract-onnx = { version = "0.23.9", default-features = false }
-ort = { version = "=2.0.0-rc.14", default-features = false }
+ort = { version = "=2.0.0-rc.15", default-features = false }
 midly = { version = "0.5.3", default-features = false, features = ["alloc"] }
 thiserror = "2.0.21"
 serde = { version = "1.0.229", features = ["derive"] }
