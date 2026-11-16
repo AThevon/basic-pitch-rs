@@ -18,7 +18,7 @@ note for note.
 
 ```toml
 [dependencies]
-basic-pitch-rs = "0.1"
+basic-pitch-rs = "0.2"
 ```
 
 The crate is imported as `basic_pitch`.

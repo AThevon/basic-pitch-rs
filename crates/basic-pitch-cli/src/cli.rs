@@ -611,7 +611,6 @@ impl Cli {
 
 /// Parses the command line, runs it and returns the exit code: 0 on success, 1 if any
 /// input failed, 2 for invalid arguments.
-#[must_use]
 pub fn main() -> ExitCode {
     let cli = Cli::parse();
     let jobs = match cli.plan() {

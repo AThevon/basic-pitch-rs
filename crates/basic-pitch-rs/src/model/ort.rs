@@ -64,7 +64,7 @@ fn shared_environment() -> Result<Environment> {
 ///
 /// The session is always created with
 /// [`AutoDevicePolicy::PreferCPU`](ort::session::builder::AutoDevicePolicy::PreferCPU).
-/// By default, `ort` 2.0.0-rc.14 asks ONNX Runtime 1.31 to select devices for maximum
+/// By default, `ort` 2.0.0-rc.15 asks ONNX Runtime 1.31 to select devices for maximum
 /// efficiency, which on macOS sends most of the graph to CoreML in float16: the outputs
 /// then drift by up to 0.15 and notes change. Registering only the CPU execution
 /// provider does not prevent that selection; the device policy does

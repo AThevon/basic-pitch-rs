@@ -130,7 +130,7 @@ jobs:
       - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
         with:
           save-if: ${{ github.ref == 'refs/heads/main' }}
-      # The ort feature is not covered: ort 2.0.0-rc.14 itself requires Rust 1.92.
+      # The ort feature is not covered: ort 2.0.0-rc.15 itself requires Rust 1.92.
       - name: Library and CLI, default features
         run: cargo check --locked
       - name: CLI with the soxr resampler

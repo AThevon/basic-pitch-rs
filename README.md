@@ -105,7 +105,7 @@ Existing files are never overwritten without `--force`. Exit codes: 0 on success
 
 ```toml
 [dependencies]
-basic-pitch-rs = "0.1"
+basic-pitch-rs = "0.2"
 ```
 
 ```rust
