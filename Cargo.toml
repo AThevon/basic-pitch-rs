@@ -4,7 +4,7 @@ members = ["crates/basic-pitch-rs", "crates/basic-pitch-cli", "crates/parity", "
 default-members = ["crates/basic-pitch-rs", "crates/basic-pitch-cli"]
 
 [workspace.package]
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.91"
 license = "Apache-2.0"
@@ -12,7 +12,7 @@ authors = ["Adrien Thevon"]
 repository = "https://github.com/AThevon/basic-pitch-rs"
 
 [workspace.dependencies]
-basic-pitch-rs = { path = "crates/basic-pitch-rs", version = "0.1.0" }
+basic-pitch-rs = { path = "crates/basic-pitch-rs", version = "0.2.0" }
 ndarray = "0.17.2"
 tract-onnx = { version = "0.23.9", default-features = false }
 ort = { version = "=2.0.0-rc.15", default-features = false }

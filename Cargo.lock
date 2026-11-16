@@ -155,7 +155,7 @@ checksum = "ac07cdecf99051d9a5238b80f35af32cdeba5b336e55d957b318b50137e18da5"
 
 [[package]]
 name = "basic-pitch-cli"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "basic-pitch-rs",
@@ -177,7 +177,7 @@ dependencies = [
 
 [[package]]
 name = "basic-pitch-rs"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "criterion",
  "hound",
@@ -192,7 +192,7 @@ dependencies = [
 
 [[package]]
 name = "basic-pitch-wasm"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "basic-pitch-rs",
  "serde",
@@ -1213,7 +1213,7 @@ dependencies = [
 
 [[package]]
 name = "parity"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "basic-pitch-rs",
  "midly",

@@ -63,7 +63,7 @@
 //! | `ort-download`  | no      | `ort`, plus a prebuilt ONNX Runtime downloaded at build time and linked statically. |
 //! | `serde`         | no      | `Serialize`/`Deserialize` on the public data types. |
 //!
-//! The `ort` feature depends on `ort` 2.0.0-rc.14 with an exact version requirement, as
+//! The `ort` feature depends on `ort` 2.0.0-rc.15 with an exact version requirement, as
 //! release candidates of `ort` are not semver-compatible with each other: an application
 //! that uses `ort` itself must use that same version. The crate is re-exported as
 //! `basic_pitch::ort`. Without `ort-download`, the `ort` crate looks for

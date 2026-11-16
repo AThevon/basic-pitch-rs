@@ -8,6 +8,23 @@ Until 1.0.0, a minor version bump (0.x.0) may contain breaking changes.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-16
+
+### Changed
+
+- The `ort` feature now depends on `ort` 2.0.0-rc.15 (exact requirement), which
+  fixes memory leaks and undefined behavior of rc.14. This release is breaking for
+  applications that use `ort` directly or through `basic_pitch::ort`: they must move
+  to rc.15 as well, and rc.15 changes some of its own API (see its release notes).
+  ONNX Runtime is still 1.31.
+- The lockfile of the command-line tool moves to tract 0.23.10.
+
+### Security
+
+- rustls-webpki and webpki-roots, used at build time by `ort-download` to fetch
+  ONNX Runtime, move to versions that fix RUSTSEC-2026-0381 and RUSTSEC-2026-0382
+  (lockfile of the command-line tool).
+
 ## [0.1.0] - 2026-10-17
 
 ### Added
@@ -50,5 +67,6 @@ Until 1.0.0, a minor version bump (0.x.0) may contain breaking changes.
   a warning, where Python turns it into a negative index and drops nearly every
   note.
 
-[Unreleased]: https://github.com/AThevon/basic-pitch-rs/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/AThevon/basic-pitch-rs/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/AThevon/basic-pitch-rs/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/AThevon/basic-pitch-rs/releases/tag/v0.1.0
